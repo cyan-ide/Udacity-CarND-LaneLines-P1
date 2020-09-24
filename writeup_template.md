@@ -40,8 +40,8 @@ The pipeline consisted of 5 steps, similar as class examples during the lessons;
 
 **Third approach** \[**testing:** First two videos] (**forther modyfing draw_lines**)
 * add additional condition to remove horizontal lines. In two first videos, with my Canny/Hough paramters, horizontal lines would show up sometimes as bottom edges of the dotted lane markings. When applying average that would cause the final line slope to have a big error vs real lane mark. This showed a problem/importance of line length parameter of Hough transform:
-** If too short the horizontal lines of the dotted lane lines are detected (and cause a problem when averaging the lane lines)
-** If too long the vertical lines of the dotted lane lines are not detected (or less of them are detected, e.g. the short ones on the horizon are missed out; if lines on the horizon are not detected before the the line on the bottom of screen disappears then there is no line detected at all)
+  * If too short the horizontal lines of the dotted lane lines are detected (and cause a problem when averaging the lane lines)
+  * If too long the vertical lines of the dotted lane lines are not detected (or less of them are detected, e.g. the short ones on the horizon are missed out; if lines on the horizon are not detected before the the line on the bottom of screen disappears then there is no line detected at all)
 
 **Fourth (final) appraoch** \[**testing:** challange video] (**forther modyfing draw_lines and parameters **)
 * in the challange video the core problem seems to be changes in light intensity. With the initial Canny paramters some lines wouldn't get detected at all (in bright light) or too many would in high contrast areas
