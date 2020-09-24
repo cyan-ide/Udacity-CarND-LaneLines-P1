@@ -1,56 +1,62 @@
 # **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+## Udacity Project 1 Writeup
 
-Overview
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+**Finding Lane Lines on the Road**
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
-
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
-
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+The goals / steps of this project are the following:
+* Make a pipeline that finds lane lines on the road
+* Reflect on your work in a written report
 
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+[//]: # (Image References)
 
-1. Describe the pipeline
+[image1]: ./examples/grayscale.jpg "Grayscale"
 
-2. Identify any shortcomings
-
-3. Suggest possible improvements
-
-We encourage using images in your writeup to demonstrate how your pipeline works.  
-
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
-
-
-The Project
 ---
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+### Reflection
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) if you haven't already.
+### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-**Step 2:** Open the code in a Jupyter Notebook
+The pipeline consisted of 5 steps, similar as class examples during the lessons;
+* 1. Convert to grayscale
+* 2. Remove noise (Gaussian smoothing)
+* 3. Detect line edges (using Canny alg)
+* 4. Mask the unwanted portions of image (ie. the area that does not contain lanes is turned black, mask coords hardcoded)
+* 5. Turn detected edges (pixels) into lines (coordicantes of start and end line) (using Hough transform)
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out [Udacity's free course on Anaconda and Jupyter Notebooks](https://classroom.udacity.com/courses/ud1111) to get started.
+**First appraoch** \[**testing:** Still images] (unmodified draw_lines - in submitted code called draw_lines_org ):
+* I used same/similar parameter settings as with the lesson code samples, jsut modifed the hardcoded coordinates of the mask
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
+**Second appraoch** \[**testing:** Still images] (**modyfing draw_lines** to have only one line per left lane marking and one for right):
+* calculate (a) slope and (b) intercept parameters for each line detected with Hough transform (ie. y = ax +b )
+* distinguish between left and right lane marking based on slope value (ie. different angles will result in negative or positive slope)
+* record seperatly slope/intercept for lines that belong to left / right markings and at the end average them out to come up with a single line per each left/right
 
-`> jupyter notebook`
+**Third approach** \[**testing:** First two videos] (**further modyfing draw_lines**)
+* add additional condition to remove horizontal lines. In two first videos, with my Canny/Hough paramters, horizontal lines would show up sometimes as bottom edges of the dotted lane markings. When applying average that would cause the final line slope to have a big error vs real lane mark. This showed a problem/importance of line length parameter of Hough transform:
+  * If too short the horizontal lines of the dotted lane lines are detected (and cause a problem when averaging the lane lines)
+  * If too long the vertical lines of the dotted lane lines are not detected (or less of them are detected, e.g. the short ones on the horizon are missed out; if lines on the horizon are not detected before the the line on the bottom of screen disappears then there is no line detected at all)
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
+**Fourth (final) appraoch** \[**testing:** challange video] (**further modyfing draw_lines and parameters **)
+* the challnage video comes in different resolution, therefore before doing any processing I rescale it to first two videos size (as my mask parameters were hardcoded rather than percent values)
+* in the challange video the core problem seems to be changes in light intensity. With the initial Canny paramters some lines wouldn't get detected at all (in bright light) or too many would in high contrast areas:
+ * (1) first modification was too greatly lower the threshold of Canny algorithm (that resulted in big amount of 'noise')
+ * (2) second modification was to filter out unwated lines, those turned to be mainly horizontal, so I further increased the condition on slope (ie. for two initial video I was about 0.3, for the final video to work I had to further constrain to 0.55)
+ * (3) some checks for exceptions like no lines detected at all. Ddue to all constraints the detected lines are typically where one woudl expect, however sometimes no lines are detected at all, I considered that 'better' than having the angle of deteced line completly off.
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+### 2. Identify potential shortcomings with your current pipeline
 
+* mask is hardcoded and overall the solution relies quite greatly on it
+* the line detection will completly fail if there is any additoonal lines on the road (e.g temporary lane marking, some accidental marking like spilled paint or even some object(s) brought by the wind like leaves of branches or string or rope or tape etc.)
+* due to relaxing thresholds in Canny alg and the noise introduced by that, the lines in consecutive frames more visibly slightly change position
+* the light intensity and weather conditions affects greatly what is and is not detected. Hardcoding all the parameters of used algorithms seems a rather big shortcoming. We could think we accounted for 'all' cases but might not be the case in reality.
+
+### 3. Suggest possible improvements to your pipeline
+
+* use past frames to calcualte line position in current frame
+* greatly increase the amout of test videos, and learn the parameter settings for all algrorithms used
