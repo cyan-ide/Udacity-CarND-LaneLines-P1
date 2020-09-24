@@ -30,16 +30,20 @@ The pipeline consisted of 5 steps, similar as class examples during the lessons;
 * 4. Mask the unwanted portions of image (ie. the area that does not contain lanes is turned black, mask coords hardcoded)
 * 5. Turn detected edges (pixels) into lines (coordicantes of start and end line) (using Hough transform)
 
-First appraoch \[testing on still images] (unmodified draw_lines - in submitted code called draw_lines_org ):
+**First appraoch** \[**testing:** Still images] (unmodified draw_lines - in submitted code called draw_lines_org ):
 * I used same/similar parameter settings as with the lesson code samples, jsut modifed the hardcoded coordinates of the mask
 
-Second appraoch (**modyfing draw_lines** to have only one line per left lane marking and one for right):
+**Second appraoch** \[**testing:** Still images] (**modyfing draw_lines** to have only one line per left lane marking and one for right):
 * calculate (a) slope and (b) intercept parameters for each line detected with Hough transform (ie. y = ax +b )
 * distinguish between left and right lane marking based on slope value (ie. different angles will result in negative or positive slope)
 * record seperatly slope/intercept for lines that belong to left / right markings and at the end average them out to come up with a single line per each left/right
 
-Third approach (**forther modyfing draw_lines**)
-* add additional condition to remove horizontal lines, in two first videos those would show up sometimes as bottom edges of the dotted lane markings. When applying average that would cause the final line slope to have a big error vs real lane mark.
+**Third approach** \[**testing:** First two videos] (**forther modyfing draw_lines**)
+* add additional condition to remove horizontal lines. In two first videos, with my Canny/Hough paramters, horizontal lines would show up sometimes as bottom edges of the dotted lane markings. When applying average that would cause the final line slope to have a big error vs real lane mark. This showed a problem/importance of line length parameter of Hough transform:
+** If too short the horizontal lines of the dotted lane lines are detected (and cause a problem when averaging the lane lines)
+** If too long the vertical lines of the dotted lane lines are not detected (or less of them are detected, e.g. the short ones on the horizon are missed out; if lines on the horizon are not detected before the the line on the bottom of screen disappears then there is no line detected at all)
+
+** Fourth (final) appraoch \[**testing:** challange video] (**forther modyfing draw_lines and parameters **)
 
 
 If you'd like to include images to show how the pipeline works, here is how to include an image: 
