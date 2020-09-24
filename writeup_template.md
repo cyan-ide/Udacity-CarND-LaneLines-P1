@@ -44,6 +44,7 @@ The pipeline consisted of 5 steps, similar as class examples during the lessons;
   * If too long the vertical lines of the dotted lane lines are not detected (or less of them are detected, e.g. the short ones on the horizon are missed out; if lines on the horizon are not detected before the the line on the bottom of screen disappears then there is no line detected at all)
 
 **Fourth (final) appraoch** \[**testing:** challange video] (**further modyfing draw_lines and parameters **)
+* the challnage video comes in different resolution, therefore before doing any processing I rescale it to first two videos size (as my mask parameters were hardcoded rather than percent values)
 * in the challange video the core problem seems to be changes in light intensity. With the initial Canny paramters some lines wouldn't get detected at all (in bright light) or too many would in high contrast areas
 * (1) first modification was too greatly lower the threshold of Canny algorithm (that resulted in big amount of 'noise')
 * (2) second modification was to filter out unwated lines, those turned to be mainly horizontal, so I further increased the condition on slope (ie. for two initial video I was about 0.3, for the final video to work I had to further constrain to 0.55)
