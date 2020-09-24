@@ -43,12 +43,11 @@ The pipeline consisted of 5 steps, similar as class examples during the lessons;
 ** If too short the horizontal lines of the dotted lane lines are detected (and cause a problem when averaging the lane lines)
 ** If too long the vertical lines of the dotted lane lines are not detected (or less of them are detected, e.g. the short ones on the horizon are missed out; if lines on the horizon are not detected before the the line on the bottom of screen disappears then there is no line detected at all)
 
-** Fourth (final) appraoch \[**testing:** challange video] (**forther modyfing draw_lines and parameters **)
-
-
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
-
-![alt text][image1]
+**Fourth (final) appraoch** \[**testing:** challange video] (**forther modyfing draw_lines and parameters **)
+* in the challange video the core problem seems to be changes in light intensity. With the initial Canny paramters some lines wouldn't get detected at all (in bright light) or too many would in high contrast areas
+* (1) first modification was too greatly lower the threshold of Canny algorithm (that resulted in big amount of 'noise')
+* (2) second modification was to filter out unwated lines, those turned to be mainly horizontal, so I further increased the condition on slope (ie. for two initial video I was about 0.3, for the final video to work I had to further constrain to 0.55)
+* (3) some checks for exceptions like no lines detected at all. Ddue to all constraints the detected lines are typically where one woudl expect, however sometimes no lines are detected at all, I considered that 'better' than having the angle of deteced line completly off.
 
 
 ### 2. Identify potential shortcomings with your current pipeline
