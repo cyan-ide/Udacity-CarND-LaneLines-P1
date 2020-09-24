@@ -55,10 +55,10 @@ The pipeline consisted of 5 steps, similar as class examples during the lessons;
 
 * mask is hardcoded and overall the solution relies quite greatly on it
 * the line detection will completly fail if there is any additoonal lines on the road (e.g temporary lane marking, some accidental marking like spilled paint or even some object(s) brought by the wind like leaves of branches or string or rope or tape etc.)
+* due to relaxing thresholds in Canny alg and the noise introduced by that, the lines in consecutive frames more visibly slightly change position
 * the light intensity and weather conditions affects greatly what is and is not detected. Hardcoding all the parameters of used algorithms seems a rather big shortcoming. We could think we accounted for 'all' cases but might not be the case in reality.
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
-
-Another potential improvement could be to ...
+* use past frames to calcualte line position in current frame
+* greatly increase the amout of test videos, and learn the parameter settings for all algrorithms used
