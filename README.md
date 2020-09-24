@@ -17,6 +17,17 @@ The goals / steps of this project are the following:
 
 ---
 
+Key files:
+* P1.ipynb - final code for the project
+* README.md - (this file) - writeup on project coding, challenges and possible improvements
+
+Additional files:
+* original_README.md - original project readme file with the description of problem to solve
+* mask_fitting.afdesign - affinity designer file used to fit the mask and get its coodinates
+* P1_basic.ipynb ; P1_experiments.ipynb - some intermediate notebooks with experiments 
+
+---
+
 ### Reflection
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
