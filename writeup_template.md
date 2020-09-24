@@ -45,19 +45,17 @@ The pipeline consisted of 5 steps, similar as class examples during the lessons;
 
 **Fourth (final) appraoch** \[**testing:** challange video] (**further modyfing draw_lines and parameters **)
 * the challnage video comes in different resolution, therefore before doing any processing I rescale it to first two videos size (as my mask parameters were hardcoded rather than percent values)
-* in the challange video the core problem seems to be changes in light intensity. With the initial Canny paramters some lines wouldn't get detected at all (in bright light) or too many would in high contrast areas
-* (1) first modification was too greatly lower the threshold of Canny algorithm (that resulted in big amount of 'noise')
-* (2) second modification was to filter out unwated lines, those turned to be mainly horizontal, so I further increased the condition on slope (ie. for two initial video I was about 0.3, for the final video to work I had to further constrain to 0.55)
-* (3) some checks for exceptions like no lines detected at all. Ddue to all constraints the detected lines are typically where one woudl expect, however sometimes no lines are detected at all, I considered that 'better' than having the angle of deteced line completly off.
+* in the challange video the core problem seems to be changes in light intensity. With the initial Canny paramters some lines wouldn't get detected at all (in bright light) or too many would in high contrast areas:
+ * (1) first modification was too greatly lower the threshold of Canny algorithm (that resulted in big amount of 'noise')
+ * (2) second modification was to filter out unwated lines, those turned to be mainly horizontal, so I further increased the condition on slope (ie. for two initial video I was about 0.3, for the final video to work I had to further constrain to 0.55)
+ * (3) some checks for exceptions like no lines detected at all. Ddue to all constraints the detected lines are typically where one woudl expect, however sometimes no lines are detected at all, I considered that 'better' than having the angle of deteced line completly off.
 
 
 ### 2. Identify potential shortcomings with your current pipeline
 
-
-One potential shortcoming would be what would happen when ... 
-
-Another shortcoming could be ...
-
+* mask is hardcoded and overall the solution relies quite greatly on it
+* the line detection will completly fail if there is any additoonal lines on the road (e.g temporary lane marking, some accidental marking like spilled paint or even some object(s) brought by the wind like leaves of branches or string or rope or tape etc.)
+* the light intensity and weather conditions affects greatly what is and is not detected. Hardcoding all the parameters of used algorithms seems a rather big shortcoming. We could think we accounted for 'all' cases but might not be the case in reality.
 
 ### 3. Suggest possible improvements to your pipeline
 
